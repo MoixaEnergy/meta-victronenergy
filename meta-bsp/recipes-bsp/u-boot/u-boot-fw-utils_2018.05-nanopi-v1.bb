@@ -7,14 +7,16 @@ COMPATIBLE_MACHINE = "nanopi"
 
 PROVIDES = ""
 
+SRCREV = "d9a73668c3801c76847fa114774b0b9c60bf6158"
 SRC_URI = " \
-	https://github.com/victronenergy/u-boot/archive/v${PV}.tar.gz \
+	gitsm://git@github.com/victronenergy/u-boot.git;protocol=ssh;branch=mans/nanopi-moixa \
 	file://fw_env.config \
-"
-SRC_URI[md5sum] = "7698560176f9c6b214fa914a87830ed5"
-SRC_URI[sha256sum] = "53c9fb151757b12144b00bb2221f6ad39c095a507044fdfe027677414f84e3a2"
+	"
+#SRC_URI[md5sum] = "7698560176f9c6b214fa914a87830ed5"
+#SRC_URI[sha256sum] = "53c9fb151757b12144b00bb2221f6ad39c095a507044fdfe027677414f84e3a2"
 
-S = "${WORKDIR}/u-boot-${PV}"
+S = "${WORKDIR}/git"
+#S = "${WORKDIR}/u-boot-${PV}"
 
 do_compile () {
 	oe_runmake -C ${S} ${UBOOT_MACHINE}

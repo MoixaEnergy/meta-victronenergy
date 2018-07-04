@@ -11,7 +11,7 @@ RDEPENDS_kernel-base += "kernel-devicetree"
 KERNEL_CONFIG_COMMAND = "oe_runmake -C ${S} O=${B} nanopi_victron_defconfig"
 
 #SRC_URI = "https://github.com/victronenergy/linux/archive/v${PV}.tar.gz"
-SRCREV="9f8c2acd5e23bf97e43d9b35c0305d24b581e758"
+SRCREV="49de0f896e511c6188fe522524d1e52df5941758"
 SRC_URI = "git://git@github.com/victronenergy/linux.git;protocol=ssh;branch=mans/nanopi-moixa"
 
 #SRC_URI[md5sum] = "f96338e142685734de0716e2333065a7"

@@ -74,11 +74,6 @@ echo "arguments: $@"
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
-        -auto)   update=auto ;;
-        -check)  update=2    ;;
-        -update) update=1    ;;
-        -delay)  delay=y     ;;
-        -force)  force=y     ;;
         -swu)
                  shift
                  force=y
@@ -116,26 +111,6 @@ if [ "$help" = y ]; then
     exit
 fi
 
-if [ "${update:-auto}" = auto ]; then
-    update=$(get_setting AutoUpdate)
-    case $update in
-        0) echo "Auto-update disabled, exit."
-           exit
-           ;;
-        1) ;;
-        2) ;;
-        *) echo "Invalid AutoUpdate value $update, exit."
-           exit 1
-           ;;
-    esac
-fi
-
-if [ "$delay" = y ]; then
-    DELAY=$[ $RANDOM % 3600 ]
-    echo "Sleeping for $DELAY seconds"
-    sleep $DELAY
-fi
-
 machine=$(cat /etc/venus/machine)
 
 if [[ $forceswu ]]; then
@@ -167,21 +142,6 @@ elif [ "$offline" = y ]; then
         swu_status -3
         exit 1
     fi
-else
-    feed=$(get_setting ReleaseType)
-
-    case $feed in
-        0) feed=release   ;;
-        1) feed=candidate ;;
-        2) feed=testing   ;;
-        3) feed=develop   ;;
-        *) echo "Invalid release type, exit."
-           exit 1
-           ;;
-    esac
-
-    URL_BASE=https://updates.victronenergy.com/feeds/venus/${feed}/images/${machine}
-    SWU=${URL_BASE}/venus-swu-${machine}.swu
 fi
 
 if [[ -z $forceswu ]]; then
@@ -199,11 +159,6 @@ if [[ -z $forceswu ]]; then
 
     cur_build=${cur_version%% *}
     swu_build=${swu_version%% *}
-
-    if [ "$offline" != y ]; then
-        # change SWU url into the full name
-        SWU=${URL_BASE}/venus-swu-${machine}-${swu_version// /-}.swu
-    fi
 
     echo "installed: $cur_version"
     echo "available: $swu_version"

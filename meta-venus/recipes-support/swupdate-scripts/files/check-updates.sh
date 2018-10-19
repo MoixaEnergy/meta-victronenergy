@@ -1,5 +1,6 @@
 #!/bin/bash
-#
+# Moixa check-update removing remote updates
+# 
 # RESUME DOWNLOAD DETAILS
 # swupdate can retry and resume a broken download. See -t and -r arguments
 # in do_swupdate call at end of this file.
@@ -93,21 +94,9 @@ if [ "$help" = y ]; then
     echo "check-updates.sh: wrapper script around swupdate"
     echo
     echo "Arguments:"
-    echo "-auto    script will check automatic update setting in localsettings."
-    echo "         use this when calling from cron or after boot."
-    echo "-delay   sleep for a random delay before starting the download of"
-    echo "         new image (to prevent thousands of units starting the"
-    echo "         download at the same time)."
-    echo "         use this when calling from cron or after boot."
-    echo "-check   (only) check if there is a new version available."
-    echo "-update  check and, when necessary, update."
-    echo "-force   force downloading and installing the new image, even if its"
-    echo "         version is older or same as already installed version."
     echo "-swu url forcefully install the swu from given url"
     echo "-offline search for updates on removable storage devices"
     echo "-help    this help"
-    echo
-    echo "Behaviour when called without any arguments is same as -update"
     exit
 fi
 

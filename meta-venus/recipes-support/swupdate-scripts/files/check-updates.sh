@@ -131,6 +131,9 @@ elif [ "$offline" = y ]; then
         swu_status -3
         exit 1
     fi
+else 
+    echo "Specify arguments for update mode"
+    exit 1
 fi
 
 if [[ -z $forceswu ]]; then

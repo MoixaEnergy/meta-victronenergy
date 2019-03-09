@@ -14,6 +14,7 @@ SRC_URI = " \
 	file://0001-fix-makefile-for-openembedded.patch \
 	file://0001-disable-proc-debug.patch \
 	file://0001-disable-roaming.patch \
+        file://0002-fix-makefile-disable-powersaving.patch \
 "
 
 S = "${WORKDIR}/git"

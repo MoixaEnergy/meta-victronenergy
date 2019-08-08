@@ -5,8 +5,9 @@ inherit daemontools
 DAEMON_PN = "${PN}-sshd"
 DAEMONTOOLS_SERVICE_DIR = "/etc/ssh/service"
 DAEMONTOOLS_RUN = "${bindir}/start-sshd.sh"
-DAEMONTOOLS_DOWN = "1"
 DAEMONTOOLS_LOG_DIR = "${DAEMONTOOLS_LOG_DIR_PREFIX}/sshd"
+# We don't start via daemontools because sshd is already a daemon
+DAEMONTOOLS_DOWN = "1"
 
 SRC_URI += "file://start-sshd.sh"
 
@@ -14,5 +15,7 @@ do_install_append() {
 	install -m 755 ${WORKDIR}/start-sshd.sh ${D}${bindir}
 }
 
-# disable the update-rc.d
-INITSCRIPT_PACKAGES = ""
+# Victron disable auto startup of sshd, but we want it
+# Note that this IGNORES victron's start-sshd.sh
+## disable the update-rc.d
+## INITSCRIPT_PACKAGES = ""

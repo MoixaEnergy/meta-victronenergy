@@ -9,20 +9,30 @@ RDEPENDS_${PN} += "\
 	simple-upnpd \
 "
 
-RDEPENDS_${PN}_append_canvu500 += "\
+QT5_RDEPENDS = " \
 	cinematicexperience \
-	evtest \
 	eglinfo-fb \
+	qt5-opengles2-test \
+	qtconnectivity \
+	qtplatform \
+	qtquickcontrols \
+	qtquickcontrols2 \
+	qtserialport \
+	qtsvg-plugins \
+"
+
+RDEPENDS_${PN}_append_canvu500 += "\
+	evtest \
 	gpio-export \
 	imx-kobs \
 	kmscube \
 	mtd-utils \
 	mtd-utils-ubifs \
 	pointercal \
-	qt5-opengles2-test \
-	qt-kms-config \
+	prodtest \
 	swupdate \
 	swupdate-scripts \
+	${QT5_RDEPENDS} \
 "
 
 RDEPENDS_${PN}_append_ccgx += "\
@@ -45,11 +55,19 @@ RDEPENDS_${PN}_append_beaglebone += "\
 	swupdate-scripts \
 "
 
-RDEPENDS_${PN}_append_nanopi += "\
+RDEPENDS_${PN}_append_einstein += "\
+	linux-firmware-bcm20702a1 \
+	linux-firmware-bcm43362 \
+	sunxi-mali \
+	sunxi-mali-blobs \
+"
+
+RDEPENDS_${PN}_append_sunxi += "\
 	cpufrequtils \
 	gpio-export \
 	hostapd \
 	linux-firmware-rtl8723b \
+	prodtest \
 	rtl8723bu \
 	swupdate \
 	swupdate-scripts \
@@ -58,6 +76,7 @@ RDEPENDS_${PN}_append_nanopi += "\
 RDEPENDS_${PN}_append_raspberrypi2 += "\
 	gpio-export \
 	linux-firmware-bcm43430 \
+	linux-firmware-bcm43455 \
 	swupdate \
 	swupdate-scripts \
 "

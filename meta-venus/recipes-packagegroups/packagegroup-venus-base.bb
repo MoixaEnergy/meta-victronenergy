@@ -28,6 +28,7 @@ inherit packagegroup
 LICENSE = "MIT"
 
 RDEPENDS_${PN} += "\
+	avahi-autoipd \
 	bash \
 	bluez5 \
 	bluez5-noinst-tools \
@@ -48,6 +49,7 @@ RDEPENDS_${PN} += "\
 	eglibc-utils \
 	ftdi-control \
 	gdbserver \
+	haveged \
 	iproute2 \
 	iw \
 	javascript-vnc-client \
@@ -56,6 +58,7 @@ RDEPENDS_${PN} += "\
 	linux-firmware-rt2800 \
 	linux-firmware-rt73 \
 	linux-firmware-rtl8192cu \
+	llmnrd \
 	localedef \
 	logo \
 	nano \
@@ -68,8 +71,10 @@ RDEPENDS_${PN} += "\
 	python-pymodbus \
 	python-pyserial \
 	rsync \
+	rtl8192eu \
 	screen \
 	socat \
+	start-stop-daemon \
 	strace \
 	sysctl-conf \
 	tzdata \
@@ -85,6 +90,7 @@ RDEPENDS_${PN} += "\
 	usbutils \
 	udev-extraconf \
 	venus-feed-configs \
+	venus-html5-app \
 	venus-version \
 	watchdog \
 	websockify-c \

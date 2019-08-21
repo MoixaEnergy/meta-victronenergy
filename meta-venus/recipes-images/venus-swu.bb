@@ -18,7 +18,7 @@ do_swuimage[depends] += "virtual/bootloader:do_deploy"
 ROOT_FSTYPE = "ubifs"
 ROOT_FSTYPE_beaglebone = "ext4.gz"
 ROOT_FSTYPE_raspberrypi2 = "ext4.gz"
-ROOT_FSTYPE_nanopi = "ext4.gz"
+ROOT_FSTYPE_sunxi = "ext4.gz"
 
 BOOT_FSTYPE = "vfat.gz"
 
@@ -27,9 +27,9 @@ IMAGE_NAME = "${IMAGE_BASENAME}-${MACHINE}-${BUILDNAME}-${DISTRO_VERSION}"
 # SWUPDATE_IMAGES: list of images that will be part of the compound image
 # the list can have any binaries - images must be in the DEPLOY directory
 SWUPDATE_IMAGES = "${IMAGE_DEPENDS}"
-SWUPDATE_IMAGES_append_canvu500 = " u-boot.imx"
+SWUPDATE_IMAGES_append_canvu500 = " u-boot.imx splash.bmp.gz"
 SWUPDATE_IMAGES_append_ccgx = " uImage u-boot.img MLO splash.bgra"
-SWUPDATE_IMAGES_append_nanopi = " u-boot-sunxi-with-spl.bin"
+SWUPDATE_IMAGES_append_sunxi = " u-boot-sunxi-with-spl.bin"
 
 SWUPDATE_IMAGES_FSTYPES[venus-image] = ".${ROOT_FSTYPE}"
 SWUPDATE_IMAGES_FSTYPES[venus-boot-image] = ".${BOOT_FSTYPE}"
@@ -40,6 +40,7 @@ SWUPDATE_IMAGES_NOAPPEND_MACHINE[u-boot.imx] = "1"
 SWUPDATE_IMAGES_NOAPPEND_MACHINE[u-boot-sunxi-with-spl.bin] = "1"
 SWUPDATE_IMAGES_NOAPPEND_MACHINE[MLO] = "1"
 SWUPDATE_IMAGES_NOAPPEND_MACHINE[splash.bgra] = "1"
+SWUPDATE_IMAGES_NOAPPEND_MACHINE[splash.bmp.gz] = "1"
 
 do_version() {
     sed -e "s/venus-version = .*;/venus-version = \"${BUILDNAME} ${DISTRO_VERSION}\";/" \

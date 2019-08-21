@@ -2,15 +2,8 @@ SUMMARY = "Add the rtl8723bu driver from Larry Finger as an out-of-tree module"
 LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.GPLv2;md5=751419260aa954499f7abaabaa882bbe"
 
-# When building on openembedded Jethro, or older versions, make sure to apply
-# this commit:
-# https://github.com/openembedded/openembedded-core/commit/afcea61e8eb39234d336c706fdfd4680dea7c060
-# to prevent warnings exactly like mentioned in that commit message.
-
-inherit module
-
 SRC_URI = " \
-	gitsm://github.com/lwfinger/rtl8723bu.git;protocol=https;rev=80916328932fa763bf4e37979aae70bd5e62da59 \
+	gitsm://github.com/lwfinger/rtl8723bu.git;protocol=https;rev=b5bad435151c7fa6fa1ef9c1923b6d7679df2430 \
 	file://0001-fix-makefile-for-openembedded.patch \
 	file://0001-disable-proc-debug.patch \
 	file://0001-disable-roaming.patch \
@@ -18,6 +11,8 @@ SRC_URI = " \
 "
 
 S = "${WORKDIR}/git"
+
+inherit module
 
 # The inherit of module.bbclass will automatically name module packages with
 # "kernel-module-" prefix as required by the oe-core build environment.

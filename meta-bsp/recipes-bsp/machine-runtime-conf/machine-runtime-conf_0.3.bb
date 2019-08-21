@@ -2,20 +2,27 @@ DESCRIPTION = "Creates the config files which are used runtime by Venus"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
 
+inherit www
+
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 SRC_URI += " \
+	file://board-compat \
 	file://get-unique-id \
 	file://hw-revision \
 	file://installation-name \
+	file://product-id \
 	file://product-name \
-	file://unique-id.sh \
+	file://machine-conf.sh \
 "
 SRC_URI_append_ccgx += "file://get-unique-id.c"
+SRC_URI_append_sunxi += "file://canbus_ports.in"
 
 inherit update-rc.d
 
-INITSCRIPT_NAME = "unique-id.sh"
+RDEPENDS_${PN} += "bash"
+
+INITSCRIPT_NAME = "machine-conf.sh"
 INITSCRIPT_PARAMS = "start 90 S ."
 
 do_compile () {
@@ -51,20 +58,26 @@ do_install_append() {
 	if [ -n "${VE_BLANK_DISPLAY}" ]; then echo ${VE_BLANK_DISPLAY} > $conf/blank_display_device; fi
 	if [ -n "${VE_BACKLIGHT}" ]; then echo ${VE_BACKLIGHT} > $conf/backlight_device; fi
 
-	if [ -n "${VE_CAN_PORTS}" ]; then echo ${VE_CAN_PORTS} > $conf/canbus_ports; fi
+	if [ -e ${WORKDIR}/canbus_ports.in ]; then
+		install -m 644 ${WORKDIR}/canbus_ports.in ${conf}
+	elif [ -n "${VE_CAN_PORTS}" ]; then
+		echo ${VE_CAN_PORTS} > $conf/canbus_ports
+	fi
 
 	install -d ${D}/${base_sbindir}
 	install -m 755 ${WORKDIR}/get-unique-id ${D}/${base_sbindir}
 
 	install -d ${D}/${bindir}
+	install -m 755 ${WORKDIR}/board-compat ${D}/${bindir}
 	install -m 755 ${WORKDIR}/hw-revision ${D}/${bindir}
 	install -m 755 ${WORKDIR}/installation-name ${D}/${bindir}
+	install -m 755 ${WORKDIR}/product-id ${D}/${bindir}
 	install -m 755 ${WORKDIR}/product-name ${D}/${bindir}
 
-	install -d ${D}/var/www/javascript-vnc-client/venus
-	ln -s /data/venus/unique-id ${D}/var/www/javascript-vnc-client/venus
-	ln -s /opt/victronenergy/version ${D}/var/www/javascript-vnc-client/venus
+	install -d ${D}${WWW_ROOT}/venus
+	ln -s /data/venus/unique-id ${D}${WWW_ROOT}/venus
+	ln -s /opt/victronenergy/version ${D}${WWW_ROOT}/venus
 
 	install -d ${D}${sysconfdir}/init.d
-	install -m 0755 ${WORKDIR}/unique-id.sh ${D}${sysconfdir}/init.d
+	install -m 0755 ${WORKDIR}/machine-conf.sh ${D}${sysconfdir}/init.d
 }

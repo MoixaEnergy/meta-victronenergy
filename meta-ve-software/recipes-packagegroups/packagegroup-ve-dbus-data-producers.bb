@@ -15,8 +15,6 @@ inherit packagegroup
 
 # List of application which provide data on the dbus in a VBusItem interface.
 # These are RRECOMMENDS so the are only included when available.
-# vecan_mk2 is not included on purpose, since it needs MACHINE specific gpio
-# lines in order to function correctly.
 
 RRECOMMENDS_${PN} += " \
 	can-bus-bms \
@@ -31,12 +29,21 @@ RRECOMMENDS_${PN} += " \
 	dbus-valence \
 	dbus-vebus-to-pvinverter \
 	gps-dbus \
+	mk2-dbus \
 	vecan-dbus \
 	vedirect-interface \
 "
 
 RRECOMMENDS_${PN}_append_beaglebone += "\
 	dbus-adc \
+	dbus-digitalinputs \
+"
+
+RRECOMMENDS_${PN}_append_canvu500 += "\
+	dbus-digitalinputs \
+"
+
+RRECOMMENDS_${PN}_append_nanopi += "\
 	dbus-digitalinputs \
 "
 

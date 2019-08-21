@@ -3,48 +3,43 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 SRC_URI += " \
 	file://mount.sh \
-	file://dt-compatible \
-	file://dt-compat.rules \
+	file://mount.blacklist.machine \
+	file://bluetooth.rules \
+	file://bt-config \
 	file://ether.rules \
 	file://machine.rules \
+	file://mtd.rules \
 	file://rtl8192cu.rules \
 	file://simcom.rules \
 "
 
 SRC_URI_append_beaglebone += "\
-	file://mount.blacklist.beaglebone \
 	file://wlan.rules \
 	file://wlan-rename \
 	file://wlan-update \
 "
 
-SRC_URI_append_nanopi += "\
-	file://mount.blacklist.nanopi \
+SRC_URI_append_sunxi += "\
 	file://slcan.rules \
 	file://wlan.rules \
 	file://wlan-rename \
 	file://wlan-update \
 "
 
-SRC_URI_append_raspberrypi2 += "\
-	file://mount.blacklist.raspberrypi2 \
-"
-
 do_install_append() {
 	install -m 0755 ${WORKDIR}/mount.sh ${D}${sysconfdir}/udev/scripts
 
-	if [ -e ${WORKDIR}/mount.blacklist.${MACHINE} ]; then
-		install -d ${D}/${sysconfdir}/udev/mount.blacklist.d
-		install -m 0644 ${WORKDIR}/mount.blacklist.${MACHINE} \
-			${D}/${sysconfdir}/udev/mount.blacklist.d/${MACHINE}
-	fi
+	install -d ${D}/${sysconfdir}/udev/mount.blacklist.d
+	install -m 0644 ${WORKDIR}/mount.blacklist.machine \
+		${D}/${sysconfdir}/udev/mount.blacklist.d/machine
 
 	install -m 0755 -d ${D}${base_libdir}/udev
-	install -m 0755 ${WORKDIR}/dt-compatible ${D}${base_libdir}/udev
+	install -m 0755 ${WORKDIR}/bt-config ${D}${base_libdir}/udev
 
-	install -m 0644 ${WORKDIR}/dt-compat.rules ${D}/${sysconfdir}/udev/rules.d
+#	install -m 0644 ${WORKDIR}/bluetooth.rules ${D}/${sysconfdir}/udev/rules.d
 	install -m 0644 ${WORKDIR}/ether.rules ${D}/${sysconfdir}/udev/rules.d
 	install -m 0644 ${WORKDIR}/machine.rules ${D}/${sysconfdir}/udev/rules.d
+	install -m 0644 ${WORKDIR}/mtd.rules ${D}/${sysconfdir}/udev/rules.d
 	install -m 0644 ${WORKDIR}/simcom.rules ${D}/${sysconfdir}/udev/rules.d
 }
 
@@ -59,7 +54,7 @@ do_install_append_ccgx() {
 	install -m 0644 ${WORKDIR}/rtl8192cu.rules ${D}${sysconfdir}/udev/rules.d
 }
 
-do_install_append_nanopi() {
+do_install_append_sunxi() {
 	install -m 0644 ${WORKDIR}/slcan.rules ${D}${sysconfdir}/udev/rules.d
 	install -m 0644 ${WORKDIR}/wlan.rules ${D}${sysconfdir}/udev/rules.d
 

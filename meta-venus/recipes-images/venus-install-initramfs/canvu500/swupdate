@@ -2,8 +2,21 @@
 
 . /lib/venus/install.sh
 
+do_mounts
+
+testmode() {
+    do_modules ftdi-sio usbserial
+    if [ ! -c /dev/ttyUSB1 ]; then
+		error "Console on VE.Direct not available"
+    fi
+    stty -F /dev/ttyUSB1 115200
+    TTYS="$TTYS ttyUSB1"
+}
+
+HOOK_testmode="testmode"
+
 SWUDEV="sda1 sda"
-UBIPART=2
+UBIPART=$(sed -n '/ubi/s/^mtd\([0-9]*\):.*/\1/p' /proc/mtd)
 TTYS="$TTYS tty0"
 
 do_install

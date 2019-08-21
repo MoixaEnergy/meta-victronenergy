@@ -14,10 +14,5 @@ S = "${WORKDIR}/linux-${PV}"
 B = "${WORKDIR}/build"
 
 SRC_URI = "https://github.com/victronenergy/linux/archive/v${PV}.tar.gz"
-<<<<<<< HEAD:meta-bsp/recipes-kernel/linux/linux-canvu500_4.14.71-canvu500-4.bb
-SRC_URI[md5sum] = "65eed9b3f05afc2e44d2955a81d83cfc"
-SRC_URI[sha256sum] = "b6cfefd2c85f679c816d899a8dca3269f84d7203b0f5cef40b37c056ffea2af9"
-=======
 SRC_URI[md5sum] = "835e7694d5a6339f25bf05315d723908"
 SRC_URI[sha256sum] = "c3c73c55db9c94b7cd45af349e89ab796c29935d55f57e1190f559900950e0d9"
->>>>>>> 9151c8f7b43bc28952cd46ba4358e61bc2bc7a63:meta-bsp/recipes-kernel/linux/linux-canvu500_4.14.71-canvu500-10.bb

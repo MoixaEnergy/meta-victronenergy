@@ -11,15 +11,30 @@ random_addr() {
     )
 }
 
+ADDR_STORE=/data/venus/bluetooth-addr
+
+get_addr() {
+    dev=$1
+    addr=$(awk "\$1 == \"$dev\" { print \$2 }" $ADDR_STORE)
+
+    if [ -z "$addr" ]; then
+        addr=$(random_addr)
+        echo $dev $addr >>$ADDR_STORE
+    fi
+
+    echo $addr
+}
+
 while hciconfig $HCI | grep -qw INIT; do
     usleep 200000
 done
 
 if hciconfig $HCI | grep -qw RAW; then
-    btmgmt -i $HCI public-addr $(random_addr)
+    btmgmt -i $HCI public-addr $(get_addr $HCI)
     usleep 200000
 fi
 
-btmgmt -i $HCI static-addr $(random_addr)
 btmgmt -i $HCI le on
 btmgmt -i $HCI bredr off
+
+svc -u /service/vesmart-server

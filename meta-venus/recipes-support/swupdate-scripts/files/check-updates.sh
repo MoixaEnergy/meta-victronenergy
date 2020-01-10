@@ -102,6 +102,8 @@ if [ "$help" = y ]; then
 fi
 
 machine=$(cat /etc/venus/machine)
+swu_name=$(cat /etc/venus/swu-name)
+swu_base=${swu_name}-${machine}
 
 if [[ $forceswu ]]; then
     echo "Updating to $forceswu"
@@ -138,7 +140,7 @@ else
 fi
 
 if [[ -z $forceswu ]]; then
-    echo "Retrieving latest version (feed=$feed)..."
+    echo "Retrieving latest version... (from $SWU)"
     swu_status 1
 
     cur_version=$(get_version)

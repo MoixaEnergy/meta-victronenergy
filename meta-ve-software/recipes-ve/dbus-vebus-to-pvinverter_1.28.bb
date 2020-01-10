@@ -11,14 +11,14 @@ SRC_URI = "gitsm://github.com/victronenergy/dbus_conversions.git;protocol=https;
 DAEMONTOOLS_SERVICE_DIR = "${bindir}/service"
 DAEMONTOOLS_RUN = "softlimit -d 100000000 -s 1000000 -a 100000000 ${bindir}/dbus_vebus_to_pvinverter.py"
 S = "${WORKDIR}/git"
-RDEPENDS_${PN} = "python-dbus"
+RDEPENDS_${PN} = "python python-dbus"
 
 do_install () {
-	install -d ${D}${bindir}
-	install -m 755 -D ${S}/*.py ${D}${bindir}
+    install -d ${D}${bindir}
+    install -m 755 -D ${S}/*.py ${D}${bindir}
 
-	install -d ${D}${bindir}/ext/velib_python
-	install ${S}/ext/velib_python/vedbus.py ${D}${bindir}/ext/velib_python
-	install ${S}/ext/velib_python/ve_utils.py ${D}${bindir}/ext/velib_python
+    install -d ${D}${bindir}/ext/velib_python
+    install ${S}/ext/velib_python/vedbus.py ${D}${bindir}/ext/velib_python
+    install ${S}/ext/velib_python/ve_utils.py ${D}${bindir}/ext/velib_python
 }
 

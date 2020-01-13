@@ -10,8 +10,8 @@ RDEPENDS_kernel-base += "kernel-devicetree"
 
 KERNEL_CONFIG_COMMAND = "oe_runmake -C ${S} O=${B} sunxi_victron_defconfig"
 
-SRCREV="7ab40a0487876fab112f46f9b1173b4f0c3b4114"
-SRC_URI = "git://git@github.com/MoixaEnergy/linux.git;protocol=ssh;branch=moixa-hub-tft"
+SRCREV="ab04b05d6a072dd4572e4b1907f8ac5fe734f47c"
+SRC_URI = "git://git@github.com/MoixaEnergy/linux.git;protocol=ssh;branch=moixa_tft_sunxi_b4.19.76"
 
 #SRC_URI[md5sum] = "7326d0571ae2e564142068a7e143acf8"
 #SRC_URI[sha256sum] = "ce2ab69783381a2ba87598f096047a66c06ee169054c384762316c296f40fea5"

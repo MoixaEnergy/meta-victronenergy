@@ -1,0 +1,16 @@
+#!/bin/sh
+
+case $(product-name) in
+"Color Control GX")
+	echo C001
+	;;
+"Venus GX")
+	echo C002
+	;;
+"Octo GX")
+	echo C006
+	;;
+*)
+	echo C003
+esac
+

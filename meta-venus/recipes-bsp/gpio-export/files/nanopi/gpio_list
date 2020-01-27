@@ -1,19 +1,26 @@
 # This is a list of gpio pins, set by the script /etc/rcS.d/S90gpio_pins.sh
 # They are documented at: https://github.com/victronenergy/venus/wiki/bbb-gpio
 # Format: <pin_number> <direction: in/out> <name>
-#
-# The <name> part is used to create an symlink in /dev/gpio.
-# NOTE: YOU ARE NOT ALLOWED TO USE THIS NAME UNTILL THIS FEATURE IS ALSO
-# IMPLEMENTED ON OTHER PLATFORMS. (Ask Matthijs :).
 
 # MK3_RST, GPIOA16
-16  out mkx_rst		victronenergy,easysolar|moixa,v4-smart-hub
+16  out mkx_rst		victronenergy,easysolar(-a9)?|moixa,v4-smart-hub
 
 # VE.Bus Standby, GPIOA15
-15  out vebus_standby	victronenergy,easysolar|moixa,v4-smart-hub
+15  out vebus_standby	victronenergy,easysolar(-a9)?|moixa,v4-smart-hub
 
-# Modem PWRKEY, GPIOA21
-21  out modem_pwr	victronenergy,paygo
+# Modem RESET, GPIOA21
+21  out modem_rst	victronenergy,paygo
 
 # USB VBUS, GPIOE13
 141 out usb_vbus	victronenergy,paygo
+
+# Light sensor
+411 in display_sensor	victronenergy,easysolar(-a9)?
+
+384 in  digital_input_1	victronenergy,maxi-gx(-a9)?
+385 in  digital_input_2	victronenergy,maxi-gx(-a9)?
+386 in  digital_input_3	victronenergy,maxi-gx(-a9)?
+387 in  digital_input_4	victronenergy,maxi-gx(-a9)?
+388 out relay_1		victronenergy,maxi-gx(-a9)?
+389 out relay_2		victronenergy,maxi-gx(-a9)?
+411 in  display_sensor	victronenergy,maxi-gx(-a9)?

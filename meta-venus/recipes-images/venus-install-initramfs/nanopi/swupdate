@@ -8,6 +8,7 @@ ROOT_SIZE=2048
 DATA_SIZE=2048
 BOARD_ID_DEV=0-00500
 TTYS="$TTYS lcd"
+TESTMODE_TTYS="ttyS2"
 
 clearlcd() {
     printf '\f' >/dev/lcd

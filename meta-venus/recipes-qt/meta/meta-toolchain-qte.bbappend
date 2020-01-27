@@ -1,8 +1,11 @@
 SDKIMAGE_FEATURES = "dev-pkgs"
 
+LICENSE = "MIT"
+LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
+
 # add a custom target task to remove all default qt libs
 TOOLCHAIN_TARGET_TASK = "packagegroup-sdk-packages"
-TOOLCHAIN_TARGET_TASK += "packagegroup-qt5-toolchain-target"
+TOOLCHAIN_TARGET_TASK += "packagegroup-venus-qt5-toolchain-target"
 
 TOOLCHAIN_HOST_TASK += "nativesdk-packagegroup-qt5-toolchain-host qt5-conf"
 TOOLCHAIN_HOST_TASK += "nativesdk-python-importlib nativesdk-python-json"
@@ -16,7 +19,7 @@ FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
 SRC_URI += "file://hardcode-qt-mkspec-paths.sh"
 
 create_sdk_files_append() {
-	cp ${WORKDIR}/hardcode-qt-mkspec-paths.sh ${SDK_OUTPUT}/${SDKPATH}/
+    cp ${WORKDIR}/hardcode-qt-mkspec-paths.sh ${SDK_OUTPUT}/${SDKPATH}/
 }
 
 # See openembedded-core/meta/files/toolchain-shar-extract.sh and

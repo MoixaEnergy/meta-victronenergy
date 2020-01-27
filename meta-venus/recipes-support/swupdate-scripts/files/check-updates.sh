@@ -1,6 +1,6 @@
 #!/bin/bash
 # Moixa check-update removing remote updates
-# 
+#
 # RESUME DOWNLOAD DETAILS
 # swupdate can retry and resume a broken download. See -t and -r arguments
 # in do_swupdate call at end of this file.
@@ -38,10 +38,10 @@
 
 get_setting() {
     dbus-send --print-reply=literal --system --type=method_call \
-              --dest=com.victronenergy.settings \
-              "/Settings/System/$1" \
-              com.victronenergy.BusItem.GetValue |
-        awk '{ print $3 }'
+        --dest=com.victronenergy.settings \
+        "/Settings/System/$1" \
+        com.victronenergy.BusItem.GetValue \
+        | awk '{ print $3 }'
 }
 
 get_swu_version() {
@@ -53,9 +53,9 @@ get_swu_version() {
         cmd="curl -s -r 0-999 -m 30 --retry 3"
     fi
 
-    $cmd "$1" |
-        cpio --quiet -i --to-stdout sw-description 2>/dev/null |
-        sed -n '/venus-version/ {
+    $cmd "$1" \
+        | cpio --quiet -i --to-stdout sw-description 2> /dev/null \
+        | sed -n '/venus-version/ {
             s/.*"\(.*\)".*/\1/
             p
             q
@@ -63,7 +63,7 @@ get_swu_version() {
 }
 
 swu_status() {
-    printf '%s\n' "$1" ${offline:+""} "$2" >$status_file
+    printf '%s\n' "$1" ${offline:+""} "$2" > $status_file
 }
 
 status_file=/var/run/swupdate-status
@@ -75,17 +75,18 @@ echo "arguments: $@"
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
-        -swu)
-                 shift
-                 force=y
-                 forceswu="$1"
-                 update="1"
+    -swu)
+        shift
+        force=y
+        forceswu="$1"
+        update="1"
         ;;
-        -offline)offline=y   ;;
-        -help)   help=y      ;;
-        *)       echo "Invalid option $arg"
-                 exit 1
-                 ;;
+    -offline) offline=y ;;
+    -help) help=y ;;
+    *)
+        echo "Invalid option $arg"
+        exit 1
+        ;;
     esac
     shift
 done
@@ -101,6 +102,8 @@ if [ "$help" = y ]; then
 fi
 
 machine=$(cat /etc/venus/machine)
+swu_name=$(cat /etc/venus/swu-name)
+swu_base=${swu_name}-${machine}
 
 if [[ $forceswu ]]; then
     echo "Updating to $forceswu"
@@ -119,7 +122,7 @@ elif [ "$offline" = y ]; then
         # MIND IT: There are ccgx and venusgx around which only check for
         # venus-swu-${machine}*.swu so don't make an incompatible ccgxv2 or
         # beaglebone-new MACHINE, since they are also accepted by the old ones.
-        SWU=$(ls -r $dev/venus-swu-${machine}-*.swu $dev/venus-swu-${machine}.swu 2>/dev/null | head -n1)
+        SWU=$(ls -r $dev/venus-swu-${machine}-*.swu $dev/venus-swu-${machine}.swu 2> /dev/null | head -n1)
         test -f "$SWU" && break
     done
 
@@ -131,13 +134,13 @@ elif [ "$offline" = y ]; then
         swu_status -3
         exit 1
     fi
-else 
+else
     echo "Specify arguments for update mode"
     exit 1
 fi
 
 if [[ -z $forceswu ]]; then
-    echo "Retrieving latest version (feed=$feed)..."
+    echo "Retrieving latest version... (from $SWU)"
     swu_status 1
 
     cur_version=$(get_version)
@@ -155,7 +158,7 @@ if [[ -z $forceswu ]]; then
     echo "installed: $cur_version"
     echo "available: $swu_version"
 
-    if [ "$force" != y -a "${swu_build}" -le "${cur_build}" ]; then
+    if [ "$force" != y -a \( "${swu_build}" = "${cur_build}" -o "$auto" = "1" -a "${swu_build}" -le "${cur_build}" \) ]; then
         echo "No newer version available, exit."
         swu_status 0
         exit
@@ -178,14 +181,14 @@ fi
 if ! lock; then
     echo "Can't get lock, other process already running? Exit."
     swu_status 0 "$swu_version"
-    exit
+    exit 1
 fi
 
 echo "Starting swupdate to install version $swu_version ..."
 swu_status 2 "$swu_version"
 
 # backup rootfs is about to be replaced, remove its version entry
-get_version >/var/run/versions
+get_version > /var/run/versions
 
 if [ -f "$SWU" ]; then
     swupdate_flags="-i"

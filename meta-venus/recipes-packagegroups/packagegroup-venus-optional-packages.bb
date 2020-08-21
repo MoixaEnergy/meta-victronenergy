@@ -7,10 +7,13 @@ DEPENDS += "\
     gdb \
     gpsd \
     git \
+    lsof \
     nodejs \
     ntp \
     openvpn \
     packagegroup-core-buildessential \
+    packagegroup-replace-busybox \
+    perf \
     python-pylint \
     s6 \
     tcpdump \

@@ -45,6 +45,7 @@ RDEPENDS_${PN} += "\
     custom-rc.d \
     dbus \
     dbus-tools \
+    default-locale \
     dnsmasq \
     e2fsprogs \
     eglibc-utils \
@@ -97,5 +98,6 @@ RDEPENDS_${PN} += "\
     watchdog \
     websockify-c \
     wget \
+    wireless-regdb-static \
     zip \
 "

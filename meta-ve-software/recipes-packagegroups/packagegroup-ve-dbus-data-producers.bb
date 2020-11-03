@@ -23,6 +23,7 @@ RRECOMMENDS_${PN} += " \
     dbus-digitalinputs \
     dbus-fronius \
     dbus-imt-si-rs485tc \
+    dbus-modbus-client \
     dbus-modem \
     dbus-motordrive \
     dbus-qwacs \
@@ -36,5 +37,9 @@ RRECOMMENDS_${PN} += " \
 "
 
 RRECOMMENDS_${PN}_append_beaglebone += "\
+    dbus-adc \
+"
+
+RRECOMMENDS_${PN}_append_einstein += "\
     dbus-adc \
 "

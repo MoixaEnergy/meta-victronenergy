@@ -51,6 +51,9 @@ BOARD_ID_SIZE=16
 # file containing board id to program
 BOARD_ID_FILE=${CARD}/board_id
 
+# location of firmware files
+FIRMWARE_DIR=/opt/victronenergy/firmware
+
 msg() {
     eval "$HOOK_msg"
     for tty in $TTYS; do
@@ -147,7 +150,6 @@ format_mmc() {
     mmc=$1
 
     root_blocks=$((ROOT_SIZE * 1024 * 2))
-    data_blocks=$((DATA_SIZE * 1024 * 2))
 
     msg "Creating partitions..."
     sfdisk -W always /dev/$mmc <<EOF
@@ -157,15 +159,11 @@ format_mmc() {
 	, $root_blocks, L
 	, $root_blocks, L
 	,, E
-	, $data_blocks, L
 	,, L
 EOF
 
     msg "Formatting data partition..."
     mkfs.ext4 -F /dev/${mmc}p5
-
-    msg "Formatting scratch partition.."
-    mkfs.ext4 -F /dev/${mmc}p6
 
     DATADEV=/dev/${mmc}p5
     DATAFS=ext4
@@ -219,13 +217,19 @@ install_swu() {
     eval $HOOK_rootfs1
     swupdate "$@" -e "stable,copy1"
 
-    msg "Installing rootfs2..."
-    eval $HOOK_rootfs2
-    swupdate "$@" -e "stable,copy2"
-
     msg "Installing bootloader..."
     eval $HOOK_bootloader
     swupdate "$@" -e "stable,bootloader"
+}
+
+install_firmware() {
+    test -d "$FIRMWARE_DIR" || return 0
+
+    msg "Installing firmware..."
+
+    find $FIRMWARE_DIR -type f | while read f; do
+        /opt/victronenergy/venus-firmware-update/venus-firmware-update "$f"
+    done
 }
 
 read_board_id() {
@@ -283,6 +287,7 @@ do_install() {
     do_format
     setup_data $DATADEV $DATAFS
     install_swu
+    install_firmware
     setup_board_id
 
     eval $HOOK_postinst

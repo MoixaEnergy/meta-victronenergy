@@ -39,12 +39,12 @@ RDEPENDS_${PN} += "\
     can-utils \
     connman \
     connman-tools \
-    crda \
     cronie \
     curl \
     custom-rc.d \
     dbus \
     dbus-tools \
+    default-locale \
     dnsmasq \
     e2fsprogs \
     eglibc-utils \

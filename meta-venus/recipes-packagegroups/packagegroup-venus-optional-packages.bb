@@ -7,10 +7,13 @@ DEPENDS += "\
     gdb \
     gpsd \
     git \
+    lsof \
     nodejs \
     ntp \
     openvpn \
     packagegroup-core-buildessential \
+    packagegroup-replace-busybox \
+    perf \
     python-pylint \
     s6 \
     tcpdump \
@@ -20,4 +23,12 @@ DEPENDS += "\
     venus-socketcan-test \
     vim \
     x11vnc \
+"
+
+# Add as optional packages until we include python3 proper
+DEPENDS += "\
+    python3-requests \
+    python3-lxml \
+    python3-paho-mqtt \
+    python3-pymodbus \
 "

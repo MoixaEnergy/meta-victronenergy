@@ -7,6 +7,7 @@ inherit daemontools
 inherit python-compile
 
 RDEPENDS_${PN} = "\
+    python \
     python-argparse \
     python-dbus \
     python-evdev \
@@ -14,7 +15,7 @@ RDEPENDS_${PN} = "\
 "
 
 SRC_URI = "\
-    gitsm://github.com/victronenergy/${PN}.git;protocol=https;tag=v${PV} \
+    gitsm://github.com/victronenergy/${BPN}.git;protocol=https;tag=v${PV} \
 "
 S = "${WORKDIR}/git"
 

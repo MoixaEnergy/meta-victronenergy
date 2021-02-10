@@ -19,3 +19,7 @@ inherit core-image
 
 IMAGE_NAME = "${IMAGE_BASENAME}-${MACHINE}-${DATETIME}-${DISTRO_VERSION}"
 IMAGE_NAME[vardepsexclude] += "DATETIME"
+
+# Note: The Venus GX was shipped with this partion size initially.
+IMAGE_ROOTFS_MAXSIZE_beaglebone = "327680"
+IMAGE_OVERHEAD_FACTOR_beaglebone = "1.05"

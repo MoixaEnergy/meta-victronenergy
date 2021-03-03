@@ -1,4 +1,5 @@
 #!/bin/bash
+# Moixa check-update removing remote updates
 #
 # RESUME DOWNLOAD DETAILS
 # swupdate can retry and resume a broken download. See -t and -r arguments
@@ -37,10 +38,10 @@
 
 get_setting() {
     dbus-send --print-reply=literal --system --type=method_call \
-              --dest=com.victronenergy.settings \
-              "/Settings/System/$1" \
-              com.victronenergy.BusItem.GetValue |
-        awk '{ print $3 }'
+        --dest=com.victronenergy.settings \
+        "/Settings/System/$1" \
+        com.victronenergy.BusItem.GetValue \
+        | awk '{ print $3 }'
 }
 
 get_swu_version() {
@@ -52,9 +53,9 @@ get_swu_version() {
         cmd="curl -s -r 0-999 -m 30 --retry 3"
     fi
 
-    $cmd "$1" |
-        cpio --quiet -i --to-stdout sw-description 2>/dev/null |
-        sed -n '/venus-version/ {
+    $cmd "$1" \
+        | cpio --quiet -i --to-stdout sw-description 2> /dev/null \
+        | sed -n '/venus-version/ {
             s/.*"\(.*\)".*/\1/
             p
             q
@@ -62,7 +63,7 @@ get_swu_version() {
 }
 
 swu_status() {
-    printf '%s\n' "$1" ${offline:+""} "$2" >$status_file
+    printf '%s\n' "$1" ${offline:+""} "$2" > $status_file
 }
 
 status_file=/var/run/swupdate-status
@@ -74,29 +75,18 @@ echo "arguments: $@"
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
-        -auto)
-                 update=auto
-                 auto=1
-                 ;;
-        -check)  update=2    ;;
-        -update) update=1    ;;
-        -delay)  delay=y     ;;
-        -force)  force=y     ;;
-        -swu)
-                 shift
-                 force=y
-                 forceswu="$1"
-                 update="1"
+    -swu)
+        shift
+        force=y
+        forceswu="$1"
+        update="1"
         ;;
-        -swubase)
-                 shift
-                 swubase="$1"
+    -offline) offline=y ;;
+    -help) help=y ;;
+    *)
+        echo "Invalid option $arg"
+        exit 1
         ;;
-        -offline)offline=y   ;;
-        -help)   help=y      ;;
-        *)       echo "Invalid option $arg"
-                 exit 1
-                 ;;
     esac
     shift
 done
@@ -105,44 +95,10 @@ if [ "$help" = y ]; then
     echo "check-updates.sh: wrapper script around swupdate"
     echo
     echo "Arguments:"
-    echo "-auto        script will check automatic update setting in localsettings."
-    echo "             use this when calling from cron or after boot."
-    echo "-delay       sleep for a random delay before starting the download of"
-    echo "             new image (to prevent thousands of units starting the"
-    echo "             download at the same time)."
-    echo "             use this when calling from cron or after boot."
-    echo "-check       (only) check if there is a new version available."
-    echo "-update      check and, when necessary, update."
-    echo "-force       force downloading and installing the new image, even if its"
-    echo "             version is older or same as already installed version."
-    echo "-swu url     forcefully install the swu from given url"
-    echo "-swubase url use given url as a base, rather than the default:"
-    echo "             https://updates.victronenergy.com/feeds/venus/[feed]/"
+    echo "-swu url forcefully install the swu from given url"
     echo "-offline search for updates on removable storage devices"
     echo "-help    this help"
-    echo
-    echo "Behaviour when called without any arguments is same as -update"
     exit
-fi
-
-if [ "${update:-auto}" = auto ]; then
-    update=$(get_setting AutoUpdate)
-    case $update in
-        0) echo "Auto-update disabled, exit."
-           exit
-           ;;
-        1) ;;
-        2) ;;
-        *) echo "Invalid AutoUpdate value $update, exit."
-           exit 1
-           ;;
-    esac
-fi
-
-if [ "$delay" = y ]; then
-    DELAY=$[ $RANDOM % 3600 ]
-    echo "Sleeping for $DELAY seconds"
-    sleep $DELAY
 fi
 
 machine=$(cat /etc/venus/machine)
@@ -166,7 +122,7 @@ elif [ "$offline" = y ]; then
         # MIND IT: There are ccgx and venusgx around which only check for
         # venus-swu-${machine}*.swu so don't make an incompatible ccgxv2 or
         # beaglebone-new MACHINE, since they are also accepted by the old ones.
-        SWU=$(ls -r $dev/${swu_base}-*.swu $dev/${swu_base}.swu 2>/dev/null | head -n1)
+        SWU=$(ls -r $dev/venus-swu-${machine}-*.swu $dev/venus-swu-${machine}.swu 2> /dev/null | head -n1)
         test -f "$SWU" && break
     done
 
@@ -179,24 +135,8 @@ elif [ "$offline" = y ]; then
         exit 1
     fi
 else
-    feed=$(get_setting ReleaseType)
-
-    case $feed in
-        0) feed=release   ;;
-        1) feed=candidate ;;
-        2) feed=testing   ;;
-        3) feed=develop   ;;
-        *) echo "Invalid release type, exit."
-           exit 1
-           ;;
-    esac
-
-    if [ -z "$swubase" ]; then
-        swubase=https://updates.victronenergy.com/feeds/venus/${feed}/
-    fi
-
-    URL_BASE=${swubase}images/${machine}
-    SWU=${URL_BASE}/${swu_base}.swu
+    echo "Specify arguments for update mode"
+    exit 1
 fi
 
 if [[ -z $forceswu ]]; then
@@ -214,11 +154,6 @@ if [[ -z $forceswu ]]; then
 
     cur_build=${cur_version%% *}
     swu_build=${swu_version%% *}
-
-    if [ "$offline" != y ]; then
-        # change SWU url into the full name
-        SWU=${URL_BASE}/${swu_base}-${swu_version// /-}.swu
-    fi
 
     echo "installed: $cur_version"
     echo "available: $swu_version"
@@ -253,7 +188,7 @@ echo "Starting swupdate to install version $swu_version ..."
 swu_status 2 "$swu_version"
 
 # backup rootfs is about to be replaced, remove its version entry
-get_version >/var/run/versions
+get_version > /var/run/versions
 
 if [ -f "$SWU" ]; then
     swupdate_flags="-i"

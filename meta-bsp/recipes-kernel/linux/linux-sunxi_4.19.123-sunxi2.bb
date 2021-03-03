@@ -10,11 +10,13 @@ RDEPENDS_kernel-base += "kernel-devicetree"
 
 KERNEL_CONFIG_COMMAND = "oe_runmake -C ${S} O=${B} sunxi_victron_defconfig"
 
-SRC_URI = "https://github.com/victronenergy/linux/archive/v${PV}.tar.gz"
-SRC_URI[md5sum] = "e4ffcc87ac51099484d25db5b1b6b929"
-SRC_URI[sha256sum] = "c75a5a69c450ca15333b0e519036ba2a6f79c77cd5d6bc91e52e47d6d0d02353"
+SRCREV="743b7dcf45d8921f1d952569bbd05cb57282714e"
+SRC_URI = "git://git@github.com/MoixaEnergy/linux.git;protocol=ssh;branch=moixa_tft_sunxi_b4.19.123-sunxi2"
 
-S = "${WORKDIR}/linux-${PV}"
+#SRC_URI[md5sum] = "7326d0571ae2e564142068a7e143acf8"
+#SRC_URI[sha256sum] = "ce2ab69783381a2ba87598f096047a66c06ee169054c384762316c296f40fea5"
+
+S = "${WORKDIR}/git"
 
 # fix make[3]: *** [scripts/extract-cert] Error 1
 DEPENDS += "openssl-native"

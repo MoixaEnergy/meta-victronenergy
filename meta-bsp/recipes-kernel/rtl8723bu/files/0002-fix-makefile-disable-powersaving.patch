@@ -1,11 +1,25 @@
---- a/Makefile	2019-03-09 20:11:58.126781368 +0000
-+++ b/Makefile	2019-03-09 20:18:35.081249340 +0000
-@@ -33,7 +33,7 @@
- ########################## WIFI IC ############################
- CONFIG_RTL8723B = y
+From 977e882de0465e99e13a9777588648701aa9f9ae Mon Sep 17 00:00:00 2001
+From: Ivo Murrell <ivo.murrell@moixa.com>
+Date: Wed, 29 Apr 2020 16:25:43 +0100
+Subject: [PATCH] fix makefile disable powersaving
+
+---
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+index 9410956..26b3abc 100644
+--- a/Makefile
++++ b/Makefile
+@@ -46,7 +46,7 @@ CONFIG_SDIO_HCI = n
+ CONFIG_GSPI_HCI = n
  ########################## Features ###########################
+ CONFIG_MP_INCLUDED = y
 -CONFIG_POWER_SAVING = y
 +CONFIG_POWER_SAVING = n
  CONFIG_USB_AUTOSUSPEND = n
  CONFIG_HW_PWRP_DETECTION = n
  CONFIG_WIFI_TEST = n
+-- 
+2.26.1
+

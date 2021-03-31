@@ -1,0 +1,24 @@
+From 4d574cf0a20dcf0e785b4a0ecb9478f01a9a12dd Mon Sep 17 00:00:00 2001
+From: Ivo Murrell <ivo.murrell@moixa.com>
+Date: Wed, 29 Apr 2020 12:02:41 +0100
+Subject: [PATCH] Enable concurrent mode.
+
+---
+ Makefile | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Makefile b/Makefile
+index 0408851..a231ff5 100644
+--- a/Makefile
++++ b/Makefile
+@@ -228,6 +228,7 @@ ifeq ($(CONFIG_RASPBIAN), y)
+ 	EXTRA_CFLAGS += -DCONFIG_IOCTL_CFG80211
+ 	EXTRA_CFLAGS += -DRTW_USE_CFG80211_STA_EVENT # only enable when kernel >= 3.2
+ 	EXTRA_CFLAGS += -DCONFIG_P2P_IPS
++	EXTRA_CFLAGS += -DCONFIG_CONCURRENT_MODE
+ ARCH := arm
+ CROSS_COMPILE := arm-linux-gnueabihf-
+ KVER := $(shell uname -r)
+-- 
+2.26.1
+

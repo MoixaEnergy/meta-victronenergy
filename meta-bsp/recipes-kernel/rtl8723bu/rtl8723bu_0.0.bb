@@ -1,13 +1,14 @@
-SUMMARY = "Add the rtl8723bu driver from Larry Finger as an out-of-tree module"
+SUMMARY = "Add the rtl8723bu driver from SonelSA as an out-of-tree module"
 LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/GPL-2.0;md5=801f80980d171dd6425610833a22dbe6"
 
 SRC_URI = " \
-    gitsm://github.com/lwfinger/rtl8723bu.git;protocol=https;rev=b5bad435151c7fa6fa1ef9c1923b6d7679df2430 \
+    git://github.com/SonelSA/rtl8723bu_realtek.git;branch=v5.2.17.1;protocol=https;rev=16f71c29b62f7d00b74a8c5865e059abdb82b949 \
     file://0001-fix-makefile-for-openembedded.patch \
-    file://0001-disable-proc-debug.patch \
+    file://0001-Enable-concurrent-mode.patch \
+    file://0001-Don-t-print-info-logs.patch \
+    file://0002-fix-makefile-disable-powersaving.patch \
     file://0001-disable-roaming.patch \
-    file://be-less-verbose.patch \
 "
 
 S = "${WORKDIR}/git"

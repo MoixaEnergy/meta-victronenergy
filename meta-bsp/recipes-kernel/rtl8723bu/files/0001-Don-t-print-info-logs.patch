@@ -1,0 +1,25 @@
+From 88f356ce6a869815f6cdcbeb46c5c31b0ff44dde Mon Sep 17 00:00:00 2001
+From: Ivo Murrell <ivo.murrell@moixa.com>
+Date: Wed, 29 Apr 2020 14:02:04 +0100
+Subject: [PATCH] Don't print info logs.
+
+---
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+index a231ff5..9410956 100644
+--- a/Makefile
++++ b/Makefile
+@@ -79,7 +79,7 @@ CONFIG_RTW_WIFI_HAL = y
+ CONFIG_RTW_DEBUG = y
+ # default log level is _DRV_INFO_ = 4,
+ # please refer to "How_to_set_driver_debug_log_level.doc" to set the available level.
+-CONFIG_RTW_LOG_LEVEL = 4
++CONFIG_RTW_LOG_LEVEL = 3
+ ######################## Wake On Lan ##########################
+ CONFIG_WOWLAN = n
+ CONFIG_WAKEUP_TYPE = 0x7 #bit2: deauth, bit1: unicast, bit0: magic pkt.
+-- 
+2.26.1
+

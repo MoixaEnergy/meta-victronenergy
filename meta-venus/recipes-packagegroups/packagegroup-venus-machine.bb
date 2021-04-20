@@ -53,6 +53,8 @@ RDEPENDS_${PN}_append_beaglebone += "\
     i2c-tools \
     linux-firmware-rtl-bt \
     prodtest \
+    rtl8723bu \
+    rtl8723du \
     swupdate \
     swupdate-scripts \
     venus-button-handler \

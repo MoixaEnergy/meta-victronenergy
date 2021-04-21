@@ -13,7 +13,5 @@ do_install_append() {
     install -m 755 ${WORKDIR}/start-sshd.sh ${D}${bindir}
 }
 
-# Victron disable auto startup of sshd, but we want it
-# Note that this IGNORES victron's start-sshd.sh
-## disable the update-rc.d
-## INITSCRIPT_PACKAGES = ""
+# disable the update-rc.d
+INITSCRIPT_PACKAGES = ""
